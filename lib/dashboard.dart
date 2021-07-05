@@ -29,7 +29,7 @@ class GeneralStatsBar extends StatelessWidget {
               title:'臺灣加權股價指數',
               element: ValueChart(imageFile:'assets/tempTPEX.png'),
               route: BigValueChart(
-                  title:'投資組合績效',
+                  title:'臺灣加權股價指數',
                   imageFile:'assets/tempTPEX.png'),
             ),
           ],

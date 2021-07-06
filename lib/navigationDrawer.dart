@@ -22,7 +22,7 @@ class NavigationDrawer extends StatelessWidget {
               child: Text('AutoQuant', style: TextStyle(
                 color: COLOR_WHITE,
                 fontSize: 30,
-                fontFamily: 'Sans-Serif',
+                fontFamily: 'Inter',
                 fontWeight: FontWeight.w700,
               )),
             ),

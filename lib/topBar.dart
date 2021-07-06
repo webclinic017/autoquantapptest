@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'utils/constants.dart';
 
 
-class TopBar extends StatelessWidget {
+class TopBar extends StatelessWidget implements PreferredSizeWidget{
   const TopBar({Key? key}) : super(key: key);
 
-
+  @override
+  Size get preferredSize => const Size.fromHeight(60);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class TopBar extends StatelessWidget {
       leading: IconButton(
         icon: const Icon(Icons.menu_sharp),
         onPressed:(){
-          print('hi');
+          Scaffold.of(context).openDrawer();
         }
       ),
       actions: <Widget> [

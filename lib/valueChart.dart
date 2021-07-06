@@ -22,7 +22,7 @@ class _ValueChartState extends State<ValueChart> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final ThemeData themeData = Theme.of(context);
-    return Container(
+    return Expanded(child:Container(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: <Widget> [
@@ -50,6 +50,6 @@ class _ValueChartState extends State<ValueChart> {
         ],
       )
 
-    );
+    ));
   }
 }

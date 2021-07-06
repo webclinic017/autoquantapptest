@@ -23,7 +23,7 @@ const TextTheme MAIN_TEXT_THEME = TextTheme(
       color: COLOR_BLUE, fontWeight: FontWeight.w700, fontSize: 18),
 
   bodyText1: TextStyle(
-      color: COLOR_BLACK, fontWeight: FontWeight.w600, fontSize: 20, height: 1.5),
+      color: COLOR_BLACK, fontWeight: FontWeight.w300, fontSize: 16, height: 1.2),
   bodyText2: TextStyle(
       color: COLOR_GREY, fontWeight: FontWeight.w300, fontSize: 15, height: 1.5),
 

@@ -1,4 +1,4 @@
-const news_data = [
+const NEWS_DATA = [
   {
     "title": "航運股再飆！類股指數首衝上400點大關創歷史新高",
     "time":  "2021-07-06 10:07:14",

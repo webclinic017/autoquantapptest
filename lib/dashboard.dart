@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'valueChart.dart';
 import 'utils/constants.dart';
+import 'dashboardNewsDisplay.dart';
 import 'displayContainer.dart';
 import 'bigValueChart.dart';
 
@@ -55,8 +56,9 @@ class Dashboard extends StatelessWidget {
       children: <Widget>[
         Text('My Dashboard', style: themeData.textTheme.headline1),
         GeneralStatsBar(),
-        Text('市場新聞與消息動態', style: themeData.textTheme.headline2, textAlign: TextAlign.center),
-        Text('And so they lived happily ever after', style: themeData.textTheme.subtitle1),
+        DashboardNewsDisplay(),
+        // Text('市場新聞與消息動態', style: themeData.textTheme.headline2, textAlign: TextAlign.center),
+        // Text('And so they lived happily ever after', style: themeData.textTheme.subtitle1),
       ],
     );
   }

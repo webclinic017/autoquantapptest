@@ -30,6 +30,34 @@ class NavigationDrawer extends StatelessWidget {
                 ),
               ),
 
+              menuDivider(
+                themeData:themeData,
+              ),
+
+              menuItem(
+                title: 'Dashboard',
+                icon: Icons.dashboard_sharp,
+                themeData: themeData,
+              ),
+
+
+              subSection(
+                title: '市場行情與資訊',
+                themeData: themeData,
+              ),
+
+              menuItem(
+                title: '大盤與國際市場指數',
+                icon: Icons.public,
+                themeData: themeData,
+              ),
+
+              menuItem(
+                title: '產業類股與概念股',
+                icon: Icons.corporate_fare_sharp,
+                themeData: themeData,
+              ),
+
               subSection(
                 title: '進階功能',
                 themeData: themeData,
@@ -61,7 +89,7 @@ class NavigationDrawer extends StatelessWidget {
 
               menuItem(
                 title: '投資組合管理',
-                icon: Icons.bar_chart_sharp,
+                icon: Icons.inventory_sharp,
                 themeData: themeData,
               ),
 
@@ -95,6 +123,14 @@ class NavigationDrawer extends StatelessWidget {
       )
     );
   }
+
+  Widget menuDivider({
+    required ThemeData themeData,
+  }){
+    return Divider(color: themeData.primaryColorLight,
+        indent:20, endIndent:20);
+  }
+
   Widget subSection({
     required String title,
     required ThemeData themeData,
@@ -110,8 +146,7 @@ class NavigationDrawer extends StatelessWidget {
             fontSize: 16,
           )),
         ),
-        Divider(color: themeData.primaryColorLight,
-            indent:20, endIndent:20),
+        menuDivider(themeData:themeData),
       ],
     );
   }
@@ -125,6 +160,7 @@ class NavigationDrawer extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 10),
       child: ListTile(
         leading: Icon(icon, color: themeData.primaryColorLight),
+        minLeadingWidth: 0,
         title: Text(title, style: TextStyle(
           color: themeData.primaryColorLight,
           fontWeight: FontWeight.w400,

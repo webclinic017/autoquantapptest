@@ -14,8 +14,8 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget{
     final ThemeData themeData = Theme.of(context);
 
     return AppBar(
-      foregroundColor: COLOR_GREY,
-      backgroundColor: COLOR_WHITE,
+      foregroundColor: themeData.primaryColor,
+      backgroundColor: themeData.primaryColorLight,
       backwardsCompatibility: false,
       title: Text('Welcome, guest_53', style: themeData.textTheme.headline4),
       leading: IconButton(

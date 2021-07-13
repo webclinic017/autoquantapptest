@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'lineChart.dart';
+import 'kChartTest.dart';
 
 class BigValueChart extends StatefulWidget {
   final String imageFile;
@@ -20,10 +21,10 @@ class _BigValueChartState extends State<BigValueChart> {
       color: themeData.backgroundColor,
       child: Column(
         children: <Widget> [
-          Hero(
-            tag: 'tempImageHero',
-            child: Image.asset(widget.imageFile),
-          ),
+          // LineChart(
+          //
+          // ),
+          MyHomePage(title: 'yo'),
           Text(widget.title,style: themeData.textTheme.headline2),
           Text('blah blah blah',style: themeData.textTheme.bodyText2),
           Text('123455678910',style: themeData.textTheme.bodyText2),

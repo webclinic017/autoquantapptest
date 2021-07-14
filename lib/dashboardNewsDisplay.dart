@@ -58,7 +58,6 @@ class _DashboardNewsDisplayState extends State<DashboardNewsDisplay> {
                       icon: Icon(Icons.unfold_more_sharp),
                       onPressed: (){
                         setState((){
-                          print(numDisplay);
                           numDisplay += 3;
                         });
                       }
@@ -67,7 +66,6 @@ class _DashboardNewsDisplayState extends State<DashboardNewsDisplay> {
                       icon: Icon(Icons.expand_less_sharp),
                       onPressed: (){
                         setState((){
-                          print(numDisplay);
                           numDisplay = 2;
                         });
                       }

@@ -4,6 +4,7 @@ import 'utils/constants.dart';
 import 'dashboardNewsDisplay.dart';
 import 'displayContainer.dart';
 import 'bigValueChart.dart';
+import 'dailyChart.dart';
 
 class GeneralStatsBar extends StatelessWidget {
   const GeneralStatsBar({Key? key}) : super(key: key);
@@ -20,8 +21,8 @@ class GeneralStatsBar extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget> [
             DisplayContainer(
-              title:'投資組合績效',
-              element: ValueChart(imageFile:'assets/tempPortfolioImage.png'),
+              title:'台機電日線',
+              element: DailyChart(stockID: 2330),
               route: BigValueChart(
                 title:'投資組合績效',
                 imageFile:'assets/tempPortfolioImage.png'),

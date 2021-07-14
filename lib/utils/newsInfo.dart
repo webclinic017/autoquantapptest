@@ -19,7 +19,6 @@ class NewsInfo{
   });
 
   factory NewsInfo.fromJson(Map<String, dynamic> json) {
-    print(int.parse(json['代號']));
     return NewsInfo(
       // dateTime: DateTime.parse(json['發布日期時間']),
       // ID: int.parse(json['代號']),

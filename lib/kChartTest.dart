@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     chartColors.defaultTextColor = Color.fromRGBO(0, 0, 0, 1);
     chartColors.selectFillColor = Color.fromRGBO(100, 255, 255, 1);
-    getData('1day');
+    getData(2330);
     rootBundle.loadString('assets/depth.json').then((result) {
       final parseJson = json.decode(result);
       final tick = parseJson['tick'] as Map<String, dynamic>;
@@ -103,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
               //`isChinese` is Deprecated, Use `translations` instead.
               isChinese: isChinese,
               hideGrid: _hideGrid,
-              maDayList: [1, 100, 1000],
+              maDayList: [5, 10, 20],
               bgColor: [themeData.primaryColorLight, themeData.backgroundColor],
             ),
           ),
@@ -188,15 +188,21 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void getData(String period) {
-    final Future<String> future = getIPAddress(period);
+  void getData(int stockID) {
+    final Future<String> future = getIPAddress(stockID);
     future.then((String result) {
-      final Map parseJson = json.decode(result) as Map<dynamic, dynamic>;
-      final list = parseJson['data'] as List<dynamic>;
+      final Map parseJson = json.decode(result) as Map<String, dynamic>;
+      final list = parseJson['data']['ticks'];
       datas = list
-          .map((item) => KLineEntity.fromJson(item as Map<String, dynamic>))
-          .toList()
-          .reversed
+          .map((item) => KLineEntity.fromCustom(
+            amount: item["Volume"].toDouble(),
+            high: item["High"].toDouble(),
+            low: item["Low"].toDouble(),
+            open: item["Open"].toDouble(),
+            close: item["Close"].toDouble(),
+            vol: item["Volume"].toDouble(),
+            time: DateTime.parse(item["Date"]).millisecondsSinceEpoch,
+          ))
           .toList()
           .cast<KLineEntity>();
       DataUtil.calculate(datas!);
@@ -205,14 +211,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }).catchError((_) {
       showLoading = false;
       setState(() {});
-      print('### datas error $_');
+      print('Data Error: $_');
     });
   }
 
   //获取火币数据，需要翻墙
-  Future<String> getIPAddress(String? period) async {
+  Future<String> getIPAddress(int stockID) async {
     var url =
-        'https://api.huobi.br.com/market/history/kline?period=${period ?? '1day'}&size=300&symbol=btcusdt';
+        'https://autoquant.ai/api/v1/stock/ohlc/$stockID';
     print (url);
     late String result;
     final response = await http.get(Uri.parse(url));

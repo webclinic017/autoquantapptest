@@ -5,6 +5,8 @@ import 'dashboardNewsDisplay.dart';
 import 'displayContainer.dart';
 import 'bigValueChart.dart';
 import 'dailyChart.dart';
+import 'realTimeChart.dart';
+import 'stockGroups.dart';
 
 class GeneralStatsBar extends StatelessWidget {
   const GeneralStatsBar({Key? key}) : super(key: key);
@@ -21,11 +23,25 @@ class GeneralStatsBar extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget> [
             DisplayContainer(
-              title:'台機電日線',
+              title:'台積電日線',
               element: DailyChart(stockID: 2330),
               route: BigValueChart(
                 title:'投資組合績效',
                 imageFile:'assets/tempPortfolioImage.png'),
+            ),
+            DisplayContainer(
+              title: ":D",
+              element: RealTimeChart(stockID: 2330),
+              route: BigValueChart(
+                  title:'投資組合績效',
+                  imageFile:'assets/tempPortfolioImage.png'),
+            ),
+            DisplayContainer(
+              title:'聯發科日線',
+              element: DailyChart(stockID: 2454),
+              route: BigValueChart(
+                  title:'投資組合績效',
+                  imageFile:'assets/tempPortfolioImage.png'),
             ),
             DisplayContainer(
               title:'臺灣加權股價指數',
@@ -57,6 +73,8 @@ class Dashboard extends StatelessWidget {
       children: <Widget>[
         Text('My Dashboard', style: themeData.textTheme.headline1),
         GeneralStatsBar(),
+
+        StockGroups(),
         DashboardNewsDisplay(),
         // Text('市場新聞與消息動態', style: themeData.textTheme.headline2, textAlign: TextAlign.center),
         // Text('And so they lived happily ever after', style: themeData.textTheme.subtitle1),

@@ -1,61 +1,76 @@
-import 'package:flutter/material.dart';
+/// Timeseries chart example
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'dart:math';
+import 'package:flutter/material.dart';
 
-class DateTimeValue{
-  final DateTime dateTime;
-  final double value;
-  DateTimeValue(this.dateTime, this.value);
-}
-class LineChart extends StatefulWidget {
-  final List<charts.Series<dynamic, DateTime> > seriesList;
-  late double _minDist ;
-  LineChart({required this.seriesList, Key? key}) : super(key: key);
-
-
-
-  // factory LineChart.withList(List< List<DateTimeValue > > dt, List<>) {
-  //
-  // }
+class realTimeChart extends StatefulWidget {
+  const realTimeChart({Key? key}) : super(key: key);
 
   @override
-  _LineChartState createState() => _LineChartState();
-  initState(){
-    _minDist = 10;
+  _realTimeChartState createState() => _realTimeChartState();
+}
+
+class _realTimeChartState extends State<realTimeChart> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
 
-class _LineChartState extends State<LineChart> {
-  @override
-  double zoomLeft=20.0, zoomRight=0.0; // counting from newest
-  static const double _zoomFactor = 0.35;
-  Widget build(BuildContext context) {
 
-    return GestureDetector(
-      onScaleUpdate: (details) {
-        double oldL = zoomLeft, oldR = zoomRight;
-        double dst = zoomLeft - zoomRight;
-        double chg = dst * details.scale * _zoomFactor;
-        zoomLeft = min((zoomLeft + chg), widget.seriesList.length.toDouble());
-        zoomRight= max((zoomRight - chg), 0.0);
-        if (zoomLeft-zoomRight < widget._minDist) {
-          zoomLeft = oldL;
-          zoomRight = oldR;
-        }else{
-          setState((){
-            zoomLeft;
-            zoomRight;
-          });
-        }
-      },
-      child:
-        charts.TimeSeriesChart(
-          widget.seriesList,
-          defaultRenderer:
-            new charts.LineRendererConfig(includeArea: true, stacked: true),
-          animate: true,
-          dateTimeFactory: const charts.LocalDateTimeFactory(),
-        )
+class SimpleTimeSeriesChart extends StatelessWidget {
+  final List<charts.Series<dynamic, DateTime>> seriesList;
+  final bool animate;
+
+  SimpleTimeSeriesChart({required this.seriesList, this.animate=false});
+
+  /// Creates a [TimeSeriesChart] with sample data and no transition.
+  factory SimpleTimeSeriesChart.withSampleData() {
+    return new SimpleTimeSeriesChart(
+      seriesList: _createSampleData(),
+      // Disable animations for image tests.
+      animate: false,
     );
   }
+
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData themeData = Theme.of(context);
+    return new charts.TimeSeriesChart(
+      seriesList,
+      animate: true,
+
+      // Optionally pass in a [DateTimeFactory] used by the chart. The factory
+      // should create the same type of [DateTime] as the data provided. If none
+      // specified, the default creates local date time.
+      dateTimeFactory: const charts.LocalDateTimeFactory(),
+    );
+  }
+
+  /// Create one series with sample hard coded data.
+  static List<charts.Series<TimeValue, DateTime>> _createSampleData() {
+    final data = [
+      new TimeValue(new DateTime(2017, 9, 19), 5),
+      new TimeValue(new DateTime(2017, 9, 26), 25),
+      new TimeValue(new DateTime(2017, 10, 3), 100),
+      new TimeValue(new DateTime(2017, 10, 10), 75),
+    ];
+
+    return [
+      charts.Series<TimeValue, DateTime>(
+        id: 'Sales',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (TimeValue sales, _) => sales.time,
+        measureFn: (TimeValue sales, _) => sales.value,
+        data: data,
+      )
+    ];
+  }
+}
+
+class TimeValue {
+  final DateTime time;
+  final double value;
+
+  TimeValue(this.time, this.value);
 }

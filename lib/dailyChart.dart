@@ -7,25 +7,30 @@ import 'package:k_chart/k_chart_widget.dart';
 import 'dart:convert';
 
 class DailyChart extends StatefulWidget {
-  final int stockID;
-  const DailyChart({Key? key, required this.stockID}) : super(key: key);
+  final String stock;
+  bool singleStock;
+  DailyChart({Key? key, required this.stock, this.singleStock = true}) : super(key: key);
 
   @override
   _DailyChartState createState() => _DailyChartState();
 }
 
 class _DailyChartState extends State<DailyChart> {
+  int stockID=-1;
   List<KLineEntity> ? datas;
   bool showLoading = true;
   @override
   void initState(){
     super.initState();
+    if (widget.singleStock) {
+      stockID = int.parse(widget.stock);
+    }
     getData();
   }
 
   void getData() {
     final Future<String> future = getIP(
-        'https://autoquant.ai/api/v1/stock/ohlc/${widget.stockID}');
+        'https://autoquant.ai/api/v1/${widget.singleStock?'stock':'index'}/ohlc/${widget.stock}');
     future.then((String result) {
       final Map parseJson = json.decode(result) as Map<String, dynamic>;
       final list = parseJson['data']['ticks'];

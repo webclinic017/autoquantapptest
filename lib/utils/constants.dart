@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 const COLOR_BLACK = Color.fromRGBO(48,48,48,1.0);
 const COLOR_DARK_GREY = Color.fromRGBO(110,110,130,1.0);
 const COLOR_GREY  = Color.fromRGBO(141, 141, 141, 1.0);
@@ -9,6 +10,8 @@ const COLOR_WHITE = Colors.white;
 const COLOR_BLUE =  Color.fromRGBO(114,118,255,1.0);
 const String WEBSITE_LOC = 'https://autoquant.ai/';
 const String API_LOC = 'https://autoquant.ai/api/v1/';
+const COLOR_GREEN = Color(0xff4DAA90);
+const COLOR_RED = Color(0xffC15466);
 
 const TextTheme MAIN_TEXT_THEME = TextTheme(
   headline1: TextStyle(
@@ -25,9 +28,9 @@ const TextTheme MAIN_TEXT_THEME = TextTheme(
       color: COLOR_BLUE, fontWeight: FontWeight.w700, fontSize: 18),
 
   bodyText1: TextStyle(
-      color: COLOR_BLACK, fontWeight: FontWeight.w300, fontSize: 16, height: 1.2),
+      color: COLOR_BLACK, fontWeight: FontWeight.w300, fontSize: 18, height: 1.2),
   bodyText2: TextStyle(
-      color: COLOR_GREY, fontWeight: FontWeight.w300, fontSize: 15, height: 1.5),
+      color: COLOR_BLACK, fontWeight: FontWeight.w300, fontSize: 15, height: 1.5),
 
   subtitle1: TextStyle(
       color: COLOR_BLACK, fontWeight: FontWeight.w200, fontSize: 14, height: 1.5),

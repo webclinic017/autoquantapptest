@@ -1,28 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:k_chart/chart_style.dart';
 import 'package:k_chart/chart_translations.dart';
 import 'package:k_chart/flutter_k_chart.dart';
 import 'package:k_chart/k_chart_widget.dart';
+import 'basicLineChart.dart';
 
-
-class BasicLineChart extends StatelessWidget {
+class BasicKChart extends BasicLineChart {
   List<KLineEntity> ? datas;
-  BasicLineChart({Key? key, required this.datas}) : super(key: key);
+  BasicKChart({required this.datas, Key? key}) : super(key: key, datas:datas);
 
-  bool isLine = true;
 
-  ChartStyle chartStyle = ChartStyle();
-  ChartColors chartColors = ChartColors();
-
-  initState(){
-    chartColors.defaultTextColor = Color(0xff000000);
-    chartColors.crossTextColor = Color(0xff000000);
-    chartColors.selectBorderColor = Color(0xff6C7A86);
-    chartColors.selectFillColor = Color(0xff0D1722);
-    chartColors.lineFillColor = Color(0x554C86CD);
-    chartColors.kLineColor = Color(0xff4C86CD);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +21,10 @@ class BasicLineChart extends StatelessWidget {
           datas,
           chartStyle,
           chartColors,
-          isLine: isLine,
+          isLine: false,
           mainState: MainState.NONE,
           volHidden: true,
-          secondaryState: SecondaryState.NONE,
+          secondaryState: SecondaryState.Model,
           fixedLength: 2,
           timeFormat: TimeFormat.YEAR_MONTH_DAY,
           translations: kChartTranslations,
@@ -46,7 +33,6 @@ class BasicLineChart extends StatelessWidget {
           maDayList: [5, 10, 20],
           bgColor: [themeData.primaryColorLight, themeData.backgroundColor],
         ),
-
       );
   }
 }

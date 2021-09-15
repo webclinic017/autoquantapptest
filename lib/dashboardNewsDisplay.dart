@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'utils/news_data.dart';
 import 'dart:math';
 import 'newsElement.dart';
 import 'displayContainer.dart';
@@ -95,7 +94,7 @@ class _DashboardNewsDisplayState extends State<DashboardNewsDisplay> {
       }
     );
     return DisplayContainer(
-        title: '市場新聞與消息動態',
+        title: '',
         element: element,
     );
   }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:testproject1/bigValueChart.dart';
+import 'package:testproject1/bigValuePage.dart';
 import 'dart:math';
 import 'utils/constants.dart';
+import 'button.dart';
 
 class DisplayContainer extends StatefulWidget {
   int duration = 0;
@@ -63,8 +64,9 @@ class _DisplayContainerState extends State<DisplayContainer> with TickerProvider
                 ),
 
 
-                child: Column(
+                child: widget.title == ''? widget.element: Column(
                   children: <Widget> [
+
                     Text(widget.title, style: themeData.textTheme.headline3),
                     Divider(
                       height: 7,

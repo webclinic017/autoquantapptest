@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'utils/constants.dart';
+import 'stockScreenPage.dart';
+import 'treemapPage.dart';
 
 class NavigationDrawer extends StatelessWidget {
   const NavigationDrawer({Key? key}) : super(key: key);
@@ -56,6 +58,10 @@ class NavigationDrawer extends StatelessWidget {
                 title: '產業類股與概念股',
                 icon: Icons.corporate_fare_sharp,
                 themeData: themeData,
+                onTap: (){
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => TreemapPage()));
+                }
               ),
 
               subSection(
@@ -67,6 +73,10 @@ class NavigationDrawer extends StatelessWidget {
                 title: '多空快速篩選',
                 icon: Icons.radar_sharp,
                 themeData: themeData,
+                onTap: (){
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => StockScreenPage()));
+                }
               ),
 
               menuItem(
@@ -168,7 +178,7 @@ class NavigationDrawer extends StatelessWidget {
         )),
         hoverColor: Colors.white70,
         onTap: () {
-          onTap;
+            if (onTap!=null) onTap();
         },
       ),
     );

@@ -29,8 +29,17 @@ dependencies:
   cupertino_icons: ^1.0.2
   english_words: ^4.0.0-0
   charts_flutter: ^0.11.0
-  k_chart: ^0.4.0
+#  k_chart: ^0.4.0
   path_provider: ^2.0.2
+  expandable_page_view: ^1.0.5
+  animated_widgets: ^1.1.0
+  syncfusion_flutter_treemap: ^19.2.51-beta
+  percent_indicator: ^3.0.1
+  flutter_radar_chart: ^0.2.0
+
+  k_chart:
+    git:
+      url: https://github.com/balbit/k_chart
 
 dev_dependencies:
   flutter_test:

@@ -7,11 +7,13 @@ import 'package:k_chart/chart_translations.dart';
 import 'package:k_chart/flutter_k_chart.dart';
 import 'package:k_chart/k_chart_widget.dart';
 import 'utils/constants.dart';
+import 'utils/getAllStocks.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, this.title}) : super(key: key);
+  MyHomePage({Key? key, this.title, this.stockID = 2330}) : super(key: key);
 
   final String? title;
+  int stockID;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -22,13 +24,15 @@ class _MyHomePageState extends State<MyHomePage> {
   bool showLoading = true;
   MainState _mainState = MainState.MA;
   bool _volHidden = false;
-  SecondaryState _secondaryState = SecondaryState.MACD;
-  bool isLine = true;
-  bool isChinese = true;
+  SecondaryState _secondaryState = SecondaryState.Model;
+  bool isLine = false;
+  bool isChinese = false;
   bool _hideGrid = false;
   bool _showNowPrice = true;
   List<DepthEntity>? _bids, _asks;
   bool isChangeUI = false;
+
+  final hi = Colors.redAccent;
 
   ChartStyle chartStyle = ChartStyle();
   ChartColors chartColors = ChartColors();
@@ -37,8 +41,15 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     chartColors.defaultTextColor = Color.fromRGBO(0, 0, 0, 1);
+    chartColors.nowPriceTextColor = Color(0xff000000);
+    chartColors.depthBuyColor = COLOR_GREEN;
+    chartColors.depthSellColor = COLOR_RED;
+    chartColors.maxColor = Color(0xff000000);
+    chartColors.minColor = Color(0xff000000);
+    Color crossTextColor = Color(0xff000000);
     chartColors.selectFillColor = Color.fromRGBO(100, 255, 255, 1);
-    getData(2330);
+
+    getData(widget.stockID);
     rootBundle.loadString('assets/depth.json').then((result) {
       final parseJson = json.decode(result);
       final tick = parseJson['tick'] as Map<String, dynamic>;
@@ -52,6 +63,13 @@ class _MyHomePageState extends State<MyHomePage> {
           .toList();
       initDepth(bids, asks);
     });
+  }
+
+  void getData(int stockID) async {
+    showLoading = true;
+    datas = await getKChartData(stockID,);
+    showLoading = false;
+    setState(() {});
   }
 
   void initDepth(List<DepthEntity>? bids, List<DepthEntity>? asks) {
@@ -81,90 +99,147 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
-    return ListView(
-      shrinkWrap: true,
-      children: <Widget>[
-        Stack(children: <Widget>[
-          Container(
-            height: 450,
-            width: double.infinity,
-            child: KChartWidget(
-              datas,
-              chartStyle,
-              chartColors,
-              isLine: isLine,
-              mainState: _mainState,
-              volHidden: _volHidden,
-              secondaryState: _secondaryState,
-              fixedLength: 2,
-              timeFormat: TimeFormat.YEAR_MONTH_DAY,
-              translations: kChartTranslations,
-              showNowPrice: _showNowPrice,
-              //`isChinese` is Deprecated, Use `translations` instead.
-              isChinese: isChinese,
-              hideGrid: _hideGrid,
-              maDayList: [5, 10, 20],
-              bgColor: [themeData.primaryColorLight, themeData.backgroundColor],
+    final Size size = MediaQuery.of(context).size;
+    return OrientationBuilder(
+      builder: (context, orientation) {
+      return Column(
+      // shrinkWrap: true,
+        children: <Widget>[
+          Stack(children: <Widget>[
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: orientation!=Orientation.portrait?size.height - 50 : double.infinity,
+              ),
+              child:
+                Container(
+                  height: orientation==Orientation.portrait?450:350,
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: KChartWidget(
+                    datas,
+                    chartStyle,
+                    chartColors,
+                    isLine: isLine,
+                    mainState: _mainState,
+                    volHidden: _volHidden,
+                    secondaryState: _secondaryState,
+                    fixedLength: 2,
+                    timeFormat: TimeFormat.YEAR_MONTH_DAY,
+                    translations: kChartTranslations,
+                    showNowPrice: _showNowPrice,
+                    //`isChinese` is Deprecated, Use `translations` instead.
+                    isChinese: isChinese,
+                    hideGrid: _hideGrid,
+                    maDayList: [5, 10, 20],
+                    bgColor: [themeData.primaryColorLight, themeData.backgroundColor],
+                  ),
+                ),
             ),
-          ),
-          if (showLoading)
-            Container(
-                width: double.infinity,
-                height: 450,
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator()),
-        ]),
-        buildButtons(),
-        if (_bids != null && _asks != null)
+
+        if (showLoading)
           Container(
-            height: 230,
-            width: double.infinity,
-            child: DepthChart(_bids!, _asks!, chartColors),
-          )
+              width: double.infinity,
+              height: 450,
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator()),
+        ]),
+        buildButtons(context),
+        // if (_bids != null && _asks != null)
+        //   Container(
+        //     color: Colors.white,
+        //     height: 230,
+        //     width: double.infinity,
+        //     child: DepthChart(_bids!, _asks!, chartColors),
+        //   )
       ],
-    );
+      );
+    });
   }
 
-  Widget buildButtons() {
-    return Wrap(
-      alignment: WrapAlignment.spaceEvenly,
-      children: <Widget>[
-        button("Time Mode", onPressed: () => isLine = true),
-        button("K Line Mode", onPressed: () => isLine = false),
-        button("Line:MA", onPressed: () => _mainState = MainState.MA),
-        button("Line:BOLL", onPressed: () => _mainState = MainState.BOLL),
-        button("Hide Line", onPressed: () => _mainState = MainState.NONE),
-        button("Secondary Chart:MACD", onPressed: () => _secondaryState = SecondaryState.MACD),
-        button("Secondary Chart:KDJ", onPressed: () => _secondaryState = SecondaryState.KDJ),
-        button("Secondary Chart:RSI", onPressed: () => _secondaryState = SecondaryState.RSI),
-        button("Secondary Chart:WR", onPressed: () => _secondaryState = SecondaryState.WR),
-        button("Secondary Chart:CCI", onPressed: () => _secondaryState = SecondaryState.CCI),
-        button("Secondary Chart:Hide", onPressed: () => _secondaryState = SecondaryState.NONE),
-        button(_volHidden ? "Show Vol" : "Hide Vol",
-            onPressed: () => _volHidden = !_volHidden),
-        button("Change Language", onPressed: () => isChinese = !isChinese),
-        button(_hideGrid ? "Show Grid" : "Hide Grid",
-            onPressed: () => _hideGrid = !_hideGrid),
-        button(_showNowPrice ? "Hide Now Price" : "Show Now Price",
-            onPressed: () => _showNowPrice = !_showNowPrice),
-        button("Customize UI", onPressed: () {
-          setState(() {
-            this.isChangeUI = !this.isChangeUI;
-            if(this.isChangeUI) {
-              chartColors.selectBorderColor = Colors.red;
-              chartColors.selectFillColor = Colors.red;
-              chartColors.lineFillColor = Colors.red;
-              chartColors.kLineColor = Colors.yellow;
-            } else {
-              chartColors.selectBorderColor = Color(0xff6C7A86);
-              chartColors.selectFillColor = Color(0xff0D1722);
-              chartColors.lineFillColor = Color(0x554C86CD);
-              chartColors.kLineColor = Color(0xff4C86CD);
-            }
-          });
-        }),
-      ],
-    );
+  Widget buildButtons(BuildContext context) {
+    final ThemeData themeData = Theme.of(context);
+    TextStyle labelStyle = themeData.textTheme.headline3!.copyWith(fontWeight: FontWeight.w600, fontSize: 20);
+    return Column(children: [
+      Row( children:[
+        Text("主圖線: ", style: labelStyle),
+        Container(
+            height: 50,
+            width: 90,
+            child: DropdownButton<MainState>(
+                value: _mainState,
+                icon: const Icon(Icons.arrow_downward_sharp),
+                iconSize: 24,
+                elevation: 16,
+                style: themeData.textTheme.bodyText1,
+                underline: Container(
+                  height: 2,
+                  color: themeData.accentColor,
+                ),
+                onChanged: (MainState? newValue) {
+                  if (newValue!=null) setState((){
+                    _mainState = newValue;
+                  });
+                },
+                items: [
+                  DropdownMenuItem(value: MainState.MA, child: Text("MA")),
+                  DropdownMenuItem(value: MainState.BOLL, child: Text("BOLL")),
+                  DropdownMenuItem(value: MainState.Model, child: Text("模型")),
+                  DropdownMenuItem(value: MainState.NONE, child: Text("無")),
+                ]
+            )
+        ),
+        Container(width: 30),
+        Text("副圖: ", style: labelStyle),
+        Container(
+            height: 50,
+            width: 90,
+            child: DropdownButton<SecondaryState>(
+                value: _secondaryState,
+                icon: const Icon(Icons.arrow_downward_sharp),
+                iconSize: 24,
+                elevation: 16,
+                style: themeData.textTheme.bodyText1,
+                underline: Container(
+                  height: 2,
+                  color: themeData.accentColor,
+                ),
+                onChanged: (SecondaryState? newValue) {
+                  if (newValue!=null) setState((){
+                    _secondaryState = newValue;
+                  });
+                },
+                items: [
+                  DropdownMenuItem(value: SecondaryState.Model, child: Text("模型")),
+                  DropdownMenuItem(value: SecondaryState.ModelDiff, child: Text("模型差")),
+                  DropdownMenuItem(value: SecondaryState.MACD, child: Text("MACD")),
+                  DropdownMenuItem(value: SecondaryState.KDJ, child: Text("KDJ")),
+                  DropdownMenuItem(value: SecondaryState.RSI, child: Text("RSI")),
+                  DropdownMenuItem(value: SecondaryState.WR, child: Text("WR")),
+                  DropdownMenuItem(value: SecondaryState.CCI, child: Text("CCI")),
+                  DropdownMenuItem(value: SecondaryState.NONE, child: Text("無")),
+                ]
+            )
+        ),
+
+      ]),
+        Row( children: [
+          Text("格線:", style: labelStyle),
+          Checkbox(
+            value: !_hideGrid,
+            onChanged: (bool? value) => setState((){_hideGrid = !value!;}),
+          ),
+          Text("量圖:", style: labelStyle),
+          Checkbox(
+            value: !_volHidden,
+            onChanged: (bool? value) => setState((){_volHidden = !value!;}),
+          ),
+          Text("現值線:", style: labelStyle),
+          Checkbox(
+            value: _showNowPrice,
+            onChanged: (bool? value) => setState((){_showNowPrice = value??_showNowPrice;}),
+          ),
+        ])
+    ]);
   }
 
   Widget button(String text, {VoidCallback? onPressed}) {
@@ -186,47 +261,5 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.blue,
       ),
     );
-  }
-
-  void getData(int stockID) {
-    final Future<String> future = getIPAddress(stockID);
-    future.then((String result) {
-      final Map parseJson = json.decode(result) as Map<String, dynamic>;
-      final list = parseJson['data']['ticks'];
-      datas = list
-          .map((item) => KLineEntity.fromCustom(
-            amount: item["Volume"].toDouble(),
-            high: item["High"].toDouble(),
-            low: item["Low"].toDouble(),
-            open: item["Open"].toDouble(),
-            close: item["Close"].toDouble(),
-            vol: item["Volume"].toDouble(),
-            time: DateTime.parse(item["Date"]).millisecondsSinceEpoch,
-          ))
-          .toList()
-          .cast<KLineEntity>();
-      DataUtil.calculate(datas!);
-      showLoading = false;
-      setState(() {});
-    }).catchError((_) {
-      showLoading = false;
-      setState(() {});
-      print('Data Error: $_');
-    });
-  }
-
-  //获取火币数据，需要翻墙
-  Future<String> getIPAddress(int stockID) async {
-    var url =
-        'https://autoquant.ai/api/v1/stock/ohlc/$stockID';
-    print (url);
-    late String result;
-    final response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      result = response.body;
-    } else {
-      print('Failed getting IP address');
-    }
-    return result;
   }
 }
